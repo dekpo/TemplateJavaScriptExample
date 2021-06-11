@@ -84,8 +84,14 @@ body, html {
   </div>
 </div>
 
+
 <!-- Container (About Section) -->
 <div class="w3-content w3-container w3-padding-64" id="about">
+
+    <p class="w3-center w3-wide w3-animate-opacity">
+        Today is <span id="today">JJ/MM/AAAA HH:MM:SS</span>
+    </p>
+    
   <h3 class="w3-center">ABOUT ME</h3>
   <p class="w3-center"><em>I love photography</em></p>
   <p>We have created a fictional "personal" website/blog, and our fictional character is a hobby photographer. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -264,6 +270,11 @@ randomNumber = Math.round( Math.random() * (arrayHome.length-1));
 console.log('randomNumber:',randomNumber);
 // je change l'url du backgroundImage de home avec mon tirage aléatoire
 home.style.backgroundImage = "url('./images/" + arrayHome[randomNumber] +"')";
+
+// afficher la date dans un élément avec l'id "today"
+
+
+// afficher la
 
 
 // Modal Image Gallery
