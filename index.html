@@ -229,12 +229,24 @@
                     class="w3-hover-opacity" alt="Empty ghost train">
             </div>
 
+            <!-- code html pour une image -->
             <div class="w3-col m3">
                 <img src="https://www.w3schools.com/w3images/p8.jpg" style="width:100%" onclick="onClick(this)"
                     class="w3-hover-opacity" alt="Sailing">
             </div>
+            <!-- fin du code html pour une image -->
+
             <button class="w3-button w3-padding-large w3-light-grey" style="margin-top:64px">LOAD MORE</button>
         </div>
+
+        <div id="dynamicRow" class="w3-row-padding w3-center w3-section">
+            VOUS ÊTES ICI !!!
+        </div>
+
+        <div id="apiRow" class="w3-row-padding w3-center w3-section">
+            API REST ICI !!!
+        </div>
+
     </div>
 
     <!-- Modal for full size images on click-->
@@ -272,7 +284,7 @@
                     mail@mail.com<br>
                 </div>
                 <p>Swing by for a cup of <i class="fa fa-coffee"></i>, or leave me a note:</p>
-                <form action="/action_page.php" target="_blank">
+                <form action="/action_page.php" target="_blank" name="myForm" onsubmit="return validateForm()">
                     <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
                         <div class="w3-half">
                             <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
@@ -306,6 +318,15 @@
     </footer>
 
     <script>
+        // verification de l'email du formulaire
+        function validateForm() {
+            var x = document.forms["myForm"]["Email"].value;
+            if (x.indexOf('@') == -1) {
+                alert("Email must contain an @");
+                return false;
+            }
+        }
+
         // on veut charger une image aléatoire dans l'élément dont l'id est home
         // je cherche l'élément home
         const home = document.getElementById("home");
@@ -317,14 +338,21 @@
         // je change l'url du backgroundImage de home avec mon tirage aléatoire
         home.style.backgroundImage = "url('./images/" + arrayHome[randomNumber] + "')";
 
-        // afficher la date et l'heure dans l'élément dont l'id est "today"
-        const d = new Date(); // crée l'objet date 
-        let day = addZero(d.getDate());
-        let month = addZero(d.getMonth() + 1);
-        let year = d.getFullYear();
-        let hours = addZero(d.getHours());
-        let minutes = addZero(d.getMinutes());
-        let secondes = addZero( d.getSeconds() );
+        /* GESTION DE LA DATE 
+        */
+        setInterval(displayDate, 1000);
+
+        function displayDate() {
+            // afficher la date et l'heure dans l'élément dont l'id est "today"
+            const d = new Date(); // crée l'objet date 
+            let day = addZero(d.getDate());
+            let month = addZero(d.getMonth() + 1);
+            let year = d.getFullYear();
+            let hours = addZero(d.getHours());
+            let minutes = addZero(d.getMinutes());
+            let secondes = addZero(d.getSeconds());
+            document.getElementById("today").innerText = `${day}/${month}/${year} ${hours}:${minutes}:${secondes}`;
+        }
 
         // petite fonction pour ajouter un zéro devant
         // les variables inférieures à 10
@@ -340,8 +368,107 @@
             } */
             return nb;
         }
+        /* FIN DE GESTION DE LA DATE 
+       */
 
-        document.getElementById("today").innerText = `${day}/${month}/${year} ${hours}:${minutes}:${secondes}`;
+        /* GESTION DU PORTFOLIO 
+       */
+        // on a ici des données au format JSON (JavaScript Object Notation)
+        // un tableau d'objets
+        const portfolio = [
+            {
+                name: 'Sunrise',
+                url: 'sunrise-1014712_640.jpeg',
+                author: 'Pierre Paul'
+            },
+            {
+                name: 'Sunrise Next',
+                url: 'sunrise-1634197_640.jpeg',
+                author: 'James Bond'
+            },
+            {
+                name: 'Swan',
+                url: 'swan-2077219_640.jpeg',
+                author: 'Tortue Ninja'
+            },
+            {
+                name: 'Ponton',
+                url: 'pier-407252_640.jpeg',
+                author: 'Peter Parker'
+            },
+            {
+                name: 'Lake I',
+                url: 'lake-1681485_640.jpeg',
+                author: 'Jeff Bezos'
+            },
+            {
+                name: 'Lake II',
+                url: 'lake-1679708_640.jpeg',
+                author: 'Tom Hanks'
+            },
+            {
+                name: 'Lake III',
+                url: 'lake-696098_640.jpeg',
+                author: 'Lara Croft'
+            },
+            {
+                name: 'Tree Next',
+                url: 'tree-838667_640.jpeg',
+                author: 'Bill Gates'
+            },
+            {
+                name: 'Mountains',
+                url: 'mountains-1587287_640.jpeg',
+                author: 'Manuel Campo'
+            },
+            {
+                name: 'Tree',
+                url: 'tree-736885.jpeg',
+                author: 'Manuel Campo'
+            }
+        ];
+        // on travaille avec le JSON comme sur un tableau avec une boucle (for in)
+        let myRow = ''; // on crée une ligne vide
+        for (let index in portfolio) {
+            // on crée un div à chaque index
+            let divImage = `<div class="w3-col m3">
+                <img src="./images/portfolio/${portfolio[index].url}" style="width:100%" onclick="onClick(this)"
+                    class="w3-hover-opacity" alt="${portfolio[index].name}">
+                    <p>${portfolio[index].author}</p>
+            </div>`;
+            // on ajoute le div dans notre chaine 'myRow'
+            myRow += divImage;
+        }
+        // on affiche le contenu de la chaine dans le div dont l'id est dynamicRow
+        document.getElementById("dynamicRow").innerHTML = myRow;
+
+        //////////////////////// TEST API REST ///////////////////////
+        /// fetch permet d'interroger une url distante pour récupérer des données (GET par défaut)
+        fetch("https://picsum.photos/v2/list?limit=10")
+            .then(function (response) {
+                return response.json(); // ici on récupère la réponse et on renvoie le JSON
+            })
+            .then(function (data) { // ici on récupère les données et on les traite
+                console.log(data);
+                let myRow = ''; // on crée une ligne vide
+                for (let index in data) {
+                    // on crée un div à chaque index
+                    let divImage = `<div class="w3-col m3">
+                <img src="${data[index].download_url}" style="width:100%" onclick="onClick(this)"
+                    class="w3-hover-opacity" alt="${data[index].download_url}">
+                    <p>${data[index].author}</p>
+            </div>`;
+                    // on ajoute le div dans notre chaine 'myRow'
+                    myRow += divImage;
+                }
+                // on affiche le contenu de la chaine dans le div dont l'id est apiRow
+                document.getElementById("apiRow").innerHTML = myRow;
+            });
+
+        ////////////////////// FIN TEST API REST /////////////////////
+
+        ///////// GESTION DES COOKIES /////
+        document.cookie = "salutations=coucou";
 
         // Modal Image Gallery
         function onClick(element) {
